@@ -73,6 +73,7 @@ const App = () => {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Text style={styles.sectionTitle}>Hello Pikachu </Text>
+          <Text style={styles.sectionTitle}> Charizard better! </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
