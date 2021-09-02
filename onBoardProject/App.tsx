@@ -72,7 +72,7 @@ const App = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Text style={styles.sectionTitle}>Hello World</Text>
+          <Text style={styles.sectionTitle}>Hello Pikachu </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
