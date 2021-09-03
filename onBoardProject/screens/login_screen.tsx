@@ -9,6 +9,8 @@ import {
   useColorScheme,
   View,
   Pressable,
+  Alert,
+  TouchableOpacity,
 } from 'react-native';
 
 type MyProps = {
@@ -17,6 +19,35 @@ type MyProps = {
   password: string;
 };
 
+function validateEmail(email: any) {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+function checkPwd(str: string) {
+  if (str.length < 7) {
+    return false;
+  } else if (str.length > 50) {
+    return false;
+  } else if (str.search(/\d/) == -1) {
+    return false;
+  } else if (str.search(/[a-zA-Z]/) == -1) {
+    return false;
+  } else if (str.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) != -1) {
+    return false;
+  }
+  return true;
+}
+
+function pressed(email: any, password: string) {
+  const validEmail = validateEmail(email);
+  const validPassword = checkPwd(password);
+
+  validEmail && validPassword
+    ? console.log("Everything's fine")
+    : Alert.alert('Invalid email or password');
+}
 export const LoginScreen: React.FC<{
   title: string;
 }> = ({title}) => {
@@ -27,20 +58,23 @@ export const LoginScreen: React.FC<{
       <Text style={styles.titleStyle}>{title}</Text>
       <Text>Email</Text>
       <TextInput
+        autoCapitalize="none"
         style={styles.input}
         placeholder="name@domain.com"
         onChangeText={setEmail}
       />
       <Text>Password</Text>
       <TextInput
+        autoCapitalize="none"
         style={styles.input}
         placeholder="0000abcd"
-        onChangeText={val => setEmail(val)}
+        onChangeText={val => setPassword(val)}
       />
-      <Pressable style={styles.button} onPress={() => console.log('pressed')}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => pressed(email, password)}>
         <Text style={styles.buttonText}>Entrar</Text>
-      </Pressable>
-      <Text> {password} </Text>
+      </TouchableOpacity>
     </View>
   );
 };
