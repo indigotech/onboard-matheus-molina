@@ -27,6 +27,9 @@ import {
   // ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {LoginScreen,} from './screens/login_screen';
+
+
 const Section: React.FC<{
   title: string;
 }> = ({children, title}) => {
@@ -60,22 +63,15 @@ const App = () => {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    flex: 1,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Text style={styles.sectionTitle}>Hello Pikachu </Text>
-          <Text style={styles.sectionTitle}> Charizard better! </Text>
-        </View>
-      </ScrollView>
+
+      
+      <LoginScreen title='Bem-vindo(a) à Taqtile!'/>   
     </SafeAreaView>
   );
 };
@@ -97,6 +93,15 @@ const styles = StyleSheet.create({
   highlight: {
     fontWeight: '700',
   },
+  container: {
+    flex: 1,
+    backgroundColor: '#ff0000',
+  },
+  container2: {
+    backgroundColor: '#00ff00',
+    height: '100%',
+  },
 });
 
+//'#f0f0f0'
 export default App;
