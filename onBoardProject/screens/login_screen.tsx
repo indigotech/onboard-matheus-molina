@@ -29,7 +29,7 @@ export const LoginScreen: React.FC<{
       <TextInput
         style={styles.input}
         placeholder="name@domain.com"
-        onChangeText={val => setEmail(val)}
+        onChangeText={setEmail}
       />
       <Text>Password</Text>
       <TextInput
