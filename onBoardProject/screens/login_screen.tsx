@@ -24,7 +24,7 @@ export const LoginScreen: React.FC<{
   const [password, setPassword] = useState('');
   return (
     <View style={styles.loginView}>
-      <Text style={styles.titleStyle}> {title} </Text>
+      <Text style={styles.titleStyle}>{title}</Text>
       <Text>Email</Text>
       <TextInput
         style={styles.input}
