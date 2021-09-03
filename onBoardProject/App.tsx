@@ -103,5 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-//'#f0f0f0'
 export default App;
