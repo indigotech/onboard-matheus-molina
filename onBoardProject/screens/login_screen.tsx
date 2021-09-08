@@ -13,11 +13,29 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {gql, useMutation} from '@apollo/client';
+
 type MyProps = {
   title: string;
   email: string;
   password: string;
 };
+
+const LOGGED_IN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(data: {email: $email, password: $password}) {
+      token
+      user {
+        name
+        id
+        phone
+        birthDate
+        email
+        role
+      }
+    }
+  }
+`;
 
 function validateEmail(email: string) {
   const re =
@@ -25,26 +43,29 @@ function validateEmail(email: string) {
   return re.test(email.toLowerCase());
 }
 
-function checkPassword(password: string) {
+function validatePassword(password: string) {
   const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,50}$/;
   return re.test(password);
 }
 
-function pressed(email: string, password: string) {
-  const validEmail = validateEmail(email);
-  const validPassword = checkPassword(password);
-
-  if (validEmail && validPassword) {
-    console.log("Everything's fine");
-  } else {
-    Alert.alert('Invalid email or password');
-  }
-}
 export const LoginScreen: React.FC<{
   title: string;
 }> = ({title}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [login, {data, loading, error}] = useMutation(LOGGED_IN);
+
+  function pressed() {
+    const validEmail = validateEmail(email);
+    const validPassword = validatePassword(password);
+
+    if (validEmail && validPassword) {
+      login({variables: {email: email, password: password}});
+    } else {
+      Alert.alert('Invalid email or password');
+    }
+  }
+
   return (
     <View style={styles.loginView}>
       <Text style={styles.titleStyle}>{title}</Text>
@@ -63,9 +84,12 @@ export const LoginScreen: React.FC<{
         onChangeText={val => setPassword(val)}
       />
       <TouchableOpacity
+        disabled={loading}
         style={styles.button}
-        onPress={() => pressed(email, password)}>
-        <Text style={styles.buttonText}>Entrar</Text>
+        onPress={pressed}>
+        <Text style={styles.buttonText}>
+          {loading ? 'Carregando' : 'Entrar'}
+        </Text>
       </TouchableOpacity>
     </View>
   );
