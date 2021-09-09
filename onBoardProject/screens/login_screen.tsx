@@ -17,6 +17,7 @@ import {
 import {gql, useMutation} from '@apollo/client';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Navigation} from 'react-native-navigation';
 
 const LOGGED_IN = gql`
   mutation Login($email: String!, $password: String!) {
@@ -65,15 +66,42 @@ const getData = async () => {
   }
 };
 
-export const LoginScreen: React.FC<{
+interface LoginScreenProps {
+  componentId: string;
   title: string;
-}> = ({title}) => {
+}
+
+export const LoginScreen: React.FC<LoginScreenProps> = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [login, {data, loading, error}] = useMutation(LOGGED_IN, {
-    onCompleted: data => storeData(data.login.token),
+    onCompleted: data => {
+      storeData(data.login.token);
+      Navigation.push(props.componentId, {
+        component: {
+          name: 'HomePage', // Push the screen registered with the 'Settings' key
+          options: {
+            // Optional options object to configure the screen
+            topBar: {
+              title: {
+                text: 'Home', // Set the TopBar title of the new Screen
+              },
+            },
+          },
+        },
+      });
+    },
   });
-
+  React.useEffect(() => {
+    Navigation.mergeOptions(props.componentId, {
+      topBar: {
+        title: {
+          text: 'Login',
+        },
+        visible: false,
+      },
+    });
+  });
   async function loginPressed() {
     const validEmail = validateEmail(email);
     const validPassword = validatePassword(password);
@@ -87,7 +115,7 @@ export const LoginScreen: React.FC<{
 
   return (
     <View style={styles.loginView}>
-      <Text style={styles.titleStyle}>{title}</Text>
+      <Text style={styles.titleStyle}>{props.title}</Text>
       <Text>Email</Text>
       <TextInput
         autoCapitalize="none"
