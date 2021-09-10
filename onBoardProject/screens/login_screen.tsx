@@ -18,6 +18,7 @@ import {gql, useMutation} from '@apollo/client';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Navigation} from 'react-native-navigation';
+import LoadingIcon from '../components/loading_icon';
 
 const LOGGED_IN = gql`
   mutation Login($email: String!, $password: String!) {
@@ -105,7 +106,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
   async function loginPressed() {
     const validEmail = validateEmail(email);
     const validPassword = validatePassword(password);
-
     if (validEmail && validPassword) {
       await login({variables: {email: email, password: password}});
     } else {
@@ -135,7 +135,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
         style={styles.button}
         onPress={loginPressed}>
         <Text style={styles.buttonText}>
-          {loading ? 'Carregando' : 'Entrar'}
+          {loading ? <LoadingIcon isIconAnimating={loading} /> : 'Entrar'}
         </Text>
       </TouchableOpacity>
     </View>
