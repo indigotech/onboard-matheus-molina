@@ -2,49 +2,30 @@ import React, {Component, useState} from 'react';
 
 import {StyleSheet, Text, FlatList, View} from 'react-native';
 
-import {gql, useQuery} from '@apollo/client';
+import {useQuery} from '@apollo/client';
 
-const USER_QUERY = gql`
-  query Users($offset: Int!, $limit: Int!) {
-    users(pageInfo: {offset: $offset, limit: $limit}) {
-      nodes {
-        name
-        email
-        id
-      }
-    }
-  }
-`;
+import {USER_QUERY, UsersQuery, UserQueryVariables} from '../features/apollo-home';
 
-const UserCard = ({item}: any) => (
+interface User {
+id: string;
+name: string;
+email: string;
+}
+
+const UserCard = ({ item }: { item: User }) => (
   <View style={styles.UserCardView}>
     <Text style={styles.UserName}>{item.name}</Text>
     <Text>{item.email}</Text>
   </View>
 );
 
-interface UsersQuery {
-  users: UserNodes;
-}
-interface UserNodes {
-  nodes: UserNodesItem[];
-}
-interface UserNodesItem {
-  name: string;
-  email: string;
-  id: string;
-}
-
 export const HomeScreen: React.FC = props => {
-  const {loading, error, data, fetchMore} = useQuery<UsersQuery>(USER_QUERY, {
+  const {loading, error, data, fetchMore} = useQuery<UsersQuery, UserQueryVariables>(USER_QUERY, {
     variables: {
       offset: 0,
       limit: 15,
     },
   });
-  if (error) {
-    console.log(error);
-  }
   return (
     <View style={styles.ViewStyle}>
       <FlatList
@@ -64,6 +45,8 @@ export const HomeScreen: React.FC = props => {
               };
             },
           });
+          
+
         }}
         data={data?.users.nodes}
         renderItem={UserCard}
