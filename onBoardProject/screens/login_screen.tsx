@@ -14,6 +14,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {validateEmail, validatePassword} from '../features/validation'
+import { storeData } from '../features/apollo_management';
+
 import {gql, useMutation} from '@apollo/client';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,24 +39,9 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-function validateEmail(email: string) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email.toLowerCase());
-}
 
-function validatePassword(password: string) {
-  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,50}$/;
-  return re.test(password);
-}
 
-const storeData = async (value: string) => {
-  try {
-    await AsyncStorage.setItem('token', value);
-  } catch (error) {
-    console.log(error);
-  }
-};
+
 
 interface LoginScreenProps {
   componentId: string;
@@ -81,16 +69,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
     },
   });
 
-  React.useEffect(() => {
-    Navigation.mergeOptions(props.componentId, {
-      topBar: {
-        title: {
-          text: 'Login',
-        },
-        visible: false,
-      },
-    });
-  });
+
   async function loginPressed() {
     const validEmail = validateEmail(email);
     const validPassword = validatePassword(password);
