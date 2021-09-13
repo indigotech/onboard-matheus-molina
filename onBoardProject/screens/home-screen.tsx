@@ -4,21 +4,15 @@ import {StyleSheet, Text, FlatList, View} from 'react-native';
 
 import {useQuery} from '@apollo/client';
 
-import {
-  USER_QUERY,
-  UsersQuery,
-  UserQueryVariables,
-} from '../features/apollo-home';
-import {AddUserButton} from '../components/add-user-button';
-import {Navigation} from 'react-native-navigation';
+import {USER_QUERY, UsersQuery, UserQueryVariables} from '../features/apollo-home';
 
 interface User {
-  id: string;
-  name: string;
-  email: string;
+id: string;
+name: string;
+email: string;
 }
 
-const UserCard = ({item}: {item: User}) => (
+const UserCard = ({ item }: { item: User }) => (
   <View style={styles.UserCardView}>
     <Text style={styles.UserName}>{item.name}</Text>
     <Text>{item.email}</Text>
@@ -26,43 +20,34 @@ const UserCard = ({item}: {item: User}) => (
 );
 
 export const HomeScreen: React.FC = props => {
-  const {loading, error, data, fetchMore} = useQuery<
-    UsersQuery,
-    UserQueryVariables
-  >(USER_QUERY, {
+  const {loading, error, data, fetchMore} = useQuery<UsersQuery, UserQueryVariables>(USER_QUERY, {
     variables: {
       offset: 0,
       limit: 15,
     },
   });
-
-  const handleEndReached = async () => {
-    if (data?.users.pageInfo.hasNextPage) {
-      await fetchMore({
-        variables: {
-          offset: data?.users.nodes.length,
-        },
-        updateQuery: (previousResult, {fetchMoreResult}) => {
-          const newEntries = fetchMoreResult?.users.nodes ?? [];
-          return {
-            ...previousResult,
-            users: {
-              ...previousResult.users,
-              nodes: [...previousResult.users.nodes, ...newEntries],
-            },
-          };
-        },
-      });
-    }
-  };
-  React.useEffect(() => {
-    Navigation.mergeOptions(props.componentId, HomeOptions(props.componentId));
-  }, []);
-
   return (
     <View style={styles.ViewStyle}>
       <FlatList
-        onEndReached={handleEndReached}
+        onEndReached={async () => {
+          await fetchMore({
+            variables: {
+              offset: data?.users.nodes.length,
+            },
+            updateQuery: (previousResult, {fetchMoreResult}) => {
+              const newEntries = fetchMoreResult?.users.nodes ?? [];
+              return {
+                ...previousResult,
+                users: {
+                  ...previousResult.users,
+                  nodes: [...previousResult.users.nodes, ...newEntries],
+                },
+              };
+            },
+          });
+          
+
+        }}
         data={data?.users.nodes}
         renderItem={UserCard}
         keyExtractor={item => item.id}
@@ -92,37 +77,3 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 });
-
-const HomeOptions = (componentId: string) => ({
-  topBar: {
-    title: {
-      text: 'Home',
-    },
-    rightButtons: [
-      {
-        id: 'AddButton',
-        component: {
-          name: 'AddUserButton',
-          passProps: {
-            onTap: () => {
-              Navigation.push(componentId, {
-                component: AddUserPageComponent
-              });
-            },
-          },
-        },
-      },
-    ],
-  },
-});
-
-const AddUserPageComponent = {
-  name: 'AddUserPage',
-  options: {
-    topBar: {
-      title: {
-        text: 'SignUp',
-      },
-    },
-  },
-};
