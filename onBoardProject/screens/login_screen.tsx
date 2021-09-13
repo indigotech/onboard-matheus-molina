@@ -65,7 +65,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
   const [password, setPassword] = useState('');
   const [login, {data, loading, error}] = useMutation(LOGIN_MUTATION, {
     onCompleted: async data => {
-      console.log(data.login.token);
       await storeData(data.login.token);
       Navigation.push(props.componentId, {
         component: {
