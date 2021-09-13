@@ -14,12 +14,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {validateEmail, validatePassword} from '../features/validation'
-import { storeData } from '../features/apollo_management';
+import {validateEmail, validatePassword} from '../features/validation';
+import {storeData} from '../features/apollo_management';
 
 import {gql, useMutation} from '@apollo/client';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Navigation} from 'react-native-navigation';
 import LoadingIcon from '../components/loading_icon';
 
@@ -38,10 +37,6 @@ const LOGIN_MUTATION = gql`
     }
   }
 `;
-
-
-
-
 
 interface LoginScreenProps {
   componentId: string;
@@ -68,7 +63,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
       });
     },
   });
-
 
   async function loginPressed() {
     const validEmail = validateEmail(email);
