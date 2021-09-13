@@ -2,36 +2,34 @@ import React, {Component, useState} from 'react';
 
 import {StyleSheet, Text, FlatList, View} from 'react-native';
 
-import {gql, useMutation} from '@apollo/client';
+import {gql, useQuery} from '@apollo/client';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Navigation} from 'react-native-navigation';
-
-const DATA = [
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    username: 'Peter Parker',
-    email: 'peterparker@marvel.com',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    username: 'Spider Man',
-    email: 'spiderman@marvel.com',
-  },
-];
+const USER_QUERY = gql`
+  query {
+    users {
+      nodes {
+        name
+        email
+        id
+      }
+    }
+  }
+`;
 
 const UserCard = ({item}: any) => (
   <View style={styles.UserCardView}>
-    <Text style={styles.UserName}>{item.username}</Text>
+    <Text style={styles.UserName}>{item.name}</Text>
     <Text>{item.email}</Text>
   </View>
 );
 
 export const HomeScreen: React.FC = props => {
+  const {loading, error, data} = useQuery(USER_QUERY);
+
   return (
     <View style={styles.ViewStyle}>
       <FlatList
-        data={DATA}
+        data={data?.users.nodes}
         renderItem={UserCard}
         keyExtractor={item => item.id}
       />

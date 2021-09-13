@@ -7,13 +7,36 @@ import {Navigation} from 'react-native-navigation';
 import App from './App';
 import {name as appName} from './app.json';
 import {LoginScreen} from './screens/login_screen';
-import {ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import {setContext} from '@apollo/client/link/context';
 import React from 'react';
 import {HomeScreen} from './screens/home_screnn';
-//AppRegistry.registerComponent(appName, () => App);
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const httpLink = createHttpLink({
+  uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
+});
+
+const authLink = setContext(async (_, {headers}) => {
+  // get the authentication token from local storage if it exists
+  const token = await AsyncStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  console.log(token);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? token : '',
+    },
+  };
+});
 
 const client = new ApolloClient({
-  uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
