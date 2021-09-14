@@ -9,7 +9,8 @@ import {
   UsersQuery,
   UserQueryVariables,
 } from '../features/apollo-home';
-import { AddUserButton } from '../components/add-user-button';
+import {AddUserButton} from '../components/add-user-button';
+import {Navigation} from 'react-native-navigation';
 
 interface User {
   id: string;
@@ -34,9 +35,13 @@ export const HomeScreen: React.FC = props => {
       limit: 15,
     },
   });
+
+  React.useEffect(() => {
+    Navigation.mergeOptions(props.componentId, HomeOptions(props.componentId) );
+  }, []);
+
   return (
     <View style={styles.ViewStyle}>
-      <AddUserButton componentId={props.componentId}/>
       <FlatList
         onEndReached={async () => {
           if (data?.users.pageInfo.hasNextPage) {
@@ -86,3 +91,35 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
 });
+
+const HomeOptions = (componentId: string)=> ({
+  topBar: {
+    title: {
+      text: 'Home',
+    },
+    rightButtons: [
+      {
+        id: 'AddButton',
+        component: {
+          name: 'AddUserButton',
+          passProps: {
+            onTap: () => {
+              Navigation.push(componentId, {
+                component: {
+                  name: 'AddUserPage',
+                  options: {
+                    topBar: {
+                      title: {
+                        text: 'SignUp',
+                      },
+                    },
+                  },
+                },
+              });
+            },
+          },
+        },
+      },
+    ],
+  },
+})

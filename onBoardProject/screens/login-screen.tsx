@@ -35,21 +35,6 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
       Navigation.push(props.componentId, {
         component: {
           name: 'HomePage',
-          options: {
-            topBar: {
-              title: {
-                text: 'Home',
-              },
-              // rightButtons: [
-              //   {
-              //     id: props.componentId,
-              //     component: {
-              //       name: 'AddUserButton',
-              //     },
-              //   },
-              // ],
-            },
-          },
         },
       });
     },

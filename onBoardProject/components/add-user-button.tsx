@@ -6,22 +6,12 @@ interface AddUserButtonProps {
     componentId: string
 }
 
-export const AddUserButton: React.FC<AddUserButtonProps>= props =>{
+export const AddUserButton: React.FC<any>= props =>{
+    console.log(props);
     return(
         <View>
             <Button title='Add'
-            onPress={()=>{Navigation.push(props.componentId, {
-                component: {
-                  name: 'AddUserPage',
-                  options: {
-                    topBar: {
-                      title: {
-                        text: 'SignUp',
-                      },
-                    },
-                  },
-                },
-              });}}/>
+            onPress={props.onTap}/>
         </View>
     )
 }
