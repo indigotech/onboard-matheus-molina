@@ -40,6 +40,14 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
               title: {
                 text: 'Home',
               },
+              // rightButtons: [
+              //   {
+              //     id: props.componentId,
+              //     component: {
+              //       name: 'AddUserButton',
+              //     },
+              //   },
+              // ],
             },
           },
         },

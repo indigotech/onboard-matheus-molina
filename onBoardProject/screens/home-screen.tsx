@@ -9,6 +9,7 @@ import {
   UsersQuery,
   UserQueryVariables,
 } from '../features/apollo-home';
+import { AddUserButton } from '../components/add-user-button';
 
 interface User {
   id: string;
@@ -35,6 +36,7 @@ export const HomeScreen: React.FC = props => {
   });
   return (
     <View style={styles.ViewStyle}>
+      <AddUserButton componentId={props.componentId}/>
       <FlatList
         onEndReached={async () => {
           if (data?.users.pageInfo.hasNextPage) {
