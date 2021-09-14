@@ -20,7 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Navigation} from 'react-native-navigation';
 import LoadingIcon from '../components/loading_icon';
 
-const LOGGED_IN = gql`
+const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
     login(data: {email: $email, password: $password}) {
       token
@@ -55,18 +55,6 @@ const storeData = async (value: string) => {
   }
 };
 
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('token');
-    if (value !== null) {
-      return value;
-      // value previously stored
-    }
-  } catch (e) {
-    // error reading value
-  }
-};
-
 interface LoginScreenProps {
   componentId: string;
   title: string;
@@ -75,17 +63,17 @@ interface LoginScreenProps {
 export const LoginScreen: React.FC<LoginScreenProps> = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [login, {data, loading, error}] = useMutation(LOGGED_IN, {
-    onCompleted: data => {
-      storeData(data.login.token);
+  const [login, {data, loading, error}] = useMutation(LOGIN_MUTATION, {
+    onCompleted: async data => {
+      console.log(data.login.token);
+      await storeData(data.login.token);
       Navigation.push(props.componentId, {
         component: {
-          name: 'HomePage', // Push the screen registered with the 'Settings' key
+          name: 'HomePage',
           options: {
-            // Optional options object to configure the screen
             topBar: {
               title: {
-                text: 'Home', // Set the TopBar title of the new Screen
+                text: 'Home',
               },
             },
           },
@@ -93,6 +81,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
       });
     },
   });
+
   React.useEffect(() => {
     Navigation.mergeOptions(props.componentId, {
       topBar: {
