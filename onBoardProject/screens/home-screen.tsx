@@ -4,15 +4,19 @@ import {StyleSheet, Text, FlatList, View} from 'react-native';
 
 import {useQuery} from '@apollo/client';
 
-import {USER_QUERY, UsersQuery, UserQueryVariables} from '../features/apollo-home';
+import {
+  USER_QUERY,
+  UsersQuery,
+  UserQueryVariables,
+} from '../features/apollo-home';
 
 interface User {
-id: string;
-name: string;
-email: string;
+  id: string;
+  name: string;
+  email: string;
 }
 
-const UserCard = ({ item }: { item: User }) => (
+const UserCard = ({item}: {item: User}) => (
   <View style={styles.UserCardView}>
     <Text style={styles.UserName}>{item.name}</Text>
     <Text>{item.email}</Text>
@@ -20,7 +24,10 @@ const UserCard = ({ item }: { item: User }) => (
 );
 
 export const HomeScreen: React.FC = props => {
-  const {loading, error, data, fetchMore} = useQuery<UsersQuery, UserQueryVariables>(USER_QUERY, {
+  const {loading, error, data, fetchMore} = useQuery<
+    UsersQuery,
+    UserQueryVariables
+  >(USER_QUERY, {
     variables: {
       offset: 0,
       limit: 15,
@@ -30,23 +37,23 @@ export const HomeScreen: React.FC = props => {
     <View style={styles.ViewStyle}>
       <FlatList
         onEndReached={async () => {
-          await fetchMore({
-            variables: {
-              offset: data?.users.nodes.length,
-            },
-            updateQuery: (previousResult, {fetchMoreResult}) => {
-              const newEntries = fetchMoreResult?.users.nodes ?? [];
-              return {
-                ...previousResult,
-                users: {
-                  ...previousResult.users,
-                  nodes: [...previousResult.users.nodes, ...newEntries],
-                },
-              };
-            },
-          });
-          
-
+          if (data?.users.pageInfo.hasNextPage) {
+            await fetchMore({
+              variables: {
+                offset: data?.users.nodes.length,
+              },
+              updateQuery: (previousResult, {fetchMoreResult}) => {
+                const newEntries = fetchMoreResult?.users.nodes ?? [];
+                return {
+                  ...previousResult,
+                  users: {
+                    ...previousResult.users,
+                    nodes: [...previousResult.users.nodes, ...newEntries],
+                  },
+                };
+              },
+            });
+          }
         }}
         data={data?.users.nodes}
         renderItem={UserCard}
