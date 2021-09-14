@@ -8,7 +8,6 @@
  * @format
  */
 
-import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 import React from 'react';
 import {
   SafeAreaView,
@@ -30,10 +29,7 @@ import {
 
 import {LoginScreen} from './screens/login_screen';
 
-const client = new ApolloClient({
-  uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
-  cache: new InMemoryCache(),
-});
+
 
 const Section: React.FC<{
   title: string;
@@ -72,13 +68,10 @@ const App = () => {
   };
 
   return (
-    <ApolloProvider client={client}>
       <SafeAreaView style={backgroundStyle}>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
 
-        <LoginScreen title="Bem-vindo(a) à Taqtile!" />
+        <LoginScreen title="Bem-vindo(a) à Taqtile!" componentId={''} />
       </SafeAreaView>
-    </ApolloProvider>
   );
 };
 
