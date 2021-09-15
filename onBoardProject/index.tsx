@@ -9,14 +9,14 @@ import React from 'react';
 import {HomeScreen} from './screens/home-screen';
 import {client} from './features/apollo-client';
 import {AddUserButton} from './components/add-user-button';
-import { AddUserScreen } from './screens/add-user-screen';
+import {AddUserScreen} from './screens/add-user-screen';
 
 Navigation.registerComponent(
   'LoginPage',
   () => props =>
     (
       <ApolloProvider client={client}>
-        <LoginScreen {...props} title={'Bem-vindo(a) à Taqtile!'} />
+        <LoginScreen {...props} />
       </ApolloProvider>
     ),
   () => LoginScreen,
@@ -44,9 +44,7 @@ Navigation.registerComponent(
   () => AddUserScreen,
 );
 
-Navigation.registerComponent('AddUserButton', () => (
-    AddUserButton
-));
+Navigation.registerComponent('AddUserButton', () => AddUserButton);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({

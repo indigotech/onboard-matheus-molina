@@ -10,28 +10,40 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import LoadingIcon from '../components/loading-icon';
-import { validateDate, validateEmail, validatePassword, validatePhoneNumber, validateRole } from '../features/validation';
+import {
+  validateDate,
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateRole,
+} from '../features/validation';
+import {Picker} from '@react-native-picker/picker';
 
-export const AddUserScreen: React.FC = () => {
+export const AddUserScreen: React.FC = props => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState('user');
 
-  function SignUpPressed(){
-    const validEmail = validateEmail(email)
-    const validphone = validatePhoneNumber(phone)
-    const validBirthDate = validateDate(birthDate)
-    const validPassword = validatePassword(password)
-    const validRole = validateRole(role)
-    if(validEmail && validphone && validBirthDate && validPassword && validRole){
-      console.log('Valid Credentials')
-    }else{
-      Alert.alert('Wrong credentials, check again')
+  function SignUpPressed() {
+    const validEmail = validateEmail(email);
+    const validphone = validatePhoneNumber(phone);
+    const validBirthDate = validateDate(birthDate);
+    const validPassword = validatePassword(password);
+    const validRole = validateRole(role);
+    if (
+      validEmail &&
+      validphone &&
+      validBirthDate &&
+      validPassword &&
+      validRole
+    ) {
+      Navigation.pop(props.componentId);
+    } else {
+      Alert.alert('Wrong credentials, check again');
     }
-
   }
 
   const loading = false;
@@ -78,21 +90,27 @@ export const AddUserScreen: React.FC = () => {
           onChangeText={setPassword}
         />
         <Text style={styles.inputTitleStyle}>Role</Text>
-        <TextInput
+        {/* <TextInput
           autoCapitalize="none"
           style={styles.input}
           placeholder="i.e. admin or user"
           onChangeText={value => setRole(value.toLowerCase())}
-        />
-        <TouchableOpacity
-          disabled={loading}
-          style={styles.button}
-          onPress={SignUpPressed}>
-          <Text style={styles.buttonText}>
-            {loading ? <LoadingIcon isIconAnimating={loading} /> : 'Add User'}
-          </Text>
-        </TouchableOpacity>
+        /> */}
+        <Picker
+          selectedValue={role}
+          onValueChange={(itemValue, itemIndex) => setRole(itemValue)}>
+          <Picker.Item label="User" value="user" />
+          <Picker.Item label="Admin" value="admin" />
+        </Picker>
       </ScrollView>
+      <TouchableOpacity
+        disabled={loading}
+        style={styles.button}
+        onPress={SignUpPressed}>
+        <Text style={styles.buttonText}>
+          {loading ? <LoadingIcon isIconAnimating={loading} /> : 'Add User'}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

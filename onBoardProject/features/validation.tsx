@@ -9,18 +9,19 @@ export function validatePassword(password: string) {
   return re.test(password);
 }
 
-export function validatePhoneNumber(phone:string){
-return phone.length<17 && phone.length>7
+export function validatePhoneNumber(phone: string) {
+  return phone.length < 17 && phone.length > 7;
 }
-export function validateDate(date: string){
-  const re=/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/
-  if(re.test(date)){
-    const year =parseInt(date.split('-')[0])
-    const thisYear = new Date().getFullYear()
-    return year>1900 && year<thisYear
+
+export function validateDate(date: string) {
+  const re = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+  if (re.test(date)) {
+    const year = parseInt(date.split('-')[0]);
+    const thisYear = new Date().getFullYear();
+    return year > 1900 && year < thisYear;
   }
 }
 
-export function validateRole(role:string){
- return role=='admin' || role=='user'
+export function validateRole(role: string) {
+  return role == 'admin' || role == 'user';
 }

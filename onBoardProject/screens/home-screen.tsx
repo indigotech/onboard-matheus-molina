@@ -36,32 +36,33 @@ export const HomeScreen: React.FC = props => {
     },
   });
 
+  const handleEndReached = async () => {
+    if (data?.users.pageInfo.hasNextPage) {
+      await fetchMore({
+        variables: {
+          offset: data?.users.nodes.length,
+        },
+        updateQuery: (previousResult, {fetchMoreResult}) => {
+          const newEntries = fetchMoreResult?.users.nodes ?? [];
+          return {
+            ...previousResult,
+            users: {
+              ...previousResult.users,
+              nodes: [...previousResult.users.nodes, ...newEntries],
+            },
+          };
+        },
+      });
+    }
+  };
   React.useEffect(() => {
-    Navigation.mergeOptions(props.componentId, HomeOptions(props.componentId) );
+    Navigation.mergeOptions(props.componentId, HomeOptions(props.componentId));
   }, []);
 
   return (
     <View style={styles.ViewStyle}>
       <FlatList
-        onEndReached={async () => {
-          if (data?.users.pageInfo.hasNextPage) {
-            await fetchMore({
-              variables: {
-                offset: data?.users.nodes.length,
-              },
-              updateQuery: (previousResult, {fetchMoreResult}) => {
-                const newEntries = fetchMoreResult?.users.nodes ?? [];
-                return {
-                  ...previousResult,
-                  users: {
-                    ...previousResult.users,
-                    nodes: [...previousResult.users.nodes, ...newEntries],
-                  },
-                };
-              },
-            });
-          }
-        }}
+        onEndReached={handleEndReached}
         data={data?.users.nodes}
         renderItem={UserCard}
         keyExtractor={item => item.id}
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HomeOptions = (componentId: string)=> ({
+const HomeOptions = (componentId: string) => ({
   topBar: {
     title: {
       text: 'Home',
@@ -105,16 +106,7 @@ const HomeOptions = (componentId: string)=> ({
           passProps: {
             onTap: () => {
               Navigation.push(componentId, {
-                component: {
-                  name: 'AddUserPage',
-                  options: {
-                    topBar: {
-                      title: {
-                        text: 'SignUp',
-                      },
-                    },
-                  },
-                },
+                component: AddUserPageComponent
               });
             },
           },
@@ -122,4 +114,15 @@ const HomeOptions = (componentId: string)=> ({
       },
     ],
   },
-})
+});
+
+const AddUserPageComponent = {
+  name: 'AddUserPage',
+  options: {
+    topBar: {
+      title: {
+        text: 'SignUp',
+      },
+    },
+  },
+};

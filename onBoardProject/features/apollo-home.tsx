@@ -19,19 +19,21 @@ export interface UsersQuery {
   users: UserNodes;
   pageInfo: PageInfoItem;
 }
+
 interface PageInfoItem {
   hasNextPage: boolean;
 }
+
 interface UserNodes {
   nodes: UserNodesItem[];
   pageInfo: PageInfoItem;
 }
+
 interface UserNodesItem {
   name: string;
   email: string;
   id: string;
 }
-
 export interface UserQueryVariables {
   offset: number;
   limit: number;

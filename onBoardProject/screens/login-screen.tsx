@@ -52,7 +52,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
 
   return (
     <View style={styles.loginView}>
-      <Text style={styles.titleStyle}>{props.title}</Text>
+      <Text style={styles.titleStyle}>Bem-vindo(a) à Taqtile!</Text>
       <Text>Email</Text>
       <TextInput
         autoCapitalize="none"
