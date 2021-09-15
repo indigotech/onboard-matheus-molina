@@ -2,22 +2,12 @@
  * @format
  */
 
-import {AppRegistry} from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import App from './App';
-import {name as appName} from './app.json';
-import {LoginScreen} from './screens/login_screen';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
-} from '@apollo/client';
-import {setContext} from '@apollo/client/link/context';
+import {LoginScreen} from './screens/login-screen';
+import {ApolloProvider} from '@apollo/client';
 import React from 'react';
-import {HomeScreen} from './screens/home_screnn';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {client} from './features/apollo_management';
+import {HomeScreen} from './screens/home-screen';
+import {client} from './features/apollo-client';
 
 Navigation.registerComponent(
   'LoginPage',

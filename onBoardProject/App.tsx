@@ -27,7 +27,7 @@ import {
   // ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {LoginScreen} from './screens/login_screen';
+import {LoginScreen} from './screens/login-screen';
 
 
 

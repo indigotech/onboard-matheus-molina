@@ -15,28 +15,11 @@ import {
 } from 'react-native';
 
 import {validateEmail, validatePassword} from '../features/validation';
-import {storeData} from '../features/apollo_management';
-
-import {gql, useMutation} from '@apollo/client';
+import {LOGIN_MUTATION, storeAccesToken} from '../features/apollo-login';
+import {useMutation} from '@apollo/client';
 
 import {Navigation} from 'react-native-navigation';
-import LoadingIcon from '../components/loading_icon';
-
-const LOGIN_MUTATION = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(data: {email: $email, password: $password}) {
-      token
-      user {
-        name
-        id
-        phone
-        birthDate
-        email
-        role
-      }
-    }
-  }
-`;
+import LoadingIcon from '../components/loading-icon';
 
 interface LoginScreenProps {
   componentId: string;
@@ -48,7 +31,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
   const [password, setPassword] = useState('');
   const [login, {data, loading, error}] = useMutation(LOGIN_MUTATION, {
     onCompleted: async data => {
-      await storeData(data.login.token);
+      await storeAccesToken(data.login.token);
       Navigation.push(props.componentId, {
         component: {
           name: 'HomePage',
