@@ -18,15 +18,31 @@ import {
   validateRole,
 } from '../features/validation';
 import {Picker} from '@react-native-picker/picker';
+import {useMutation} from '@apollo/client';
+import {CREATE_USER_MUTATION} from '../features/apollo-add-user';
 
-export const AddUserScreen: React.FC = props => {
+interface AddUserScreenComponent {
+  componentId: string
+}
+
+export const AddUserScreen: React.FC<AddUserScreenComponent> = props => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user');
-
+  const [createUser, {data, loading, error}] = useMutation(
+    CREATE_USER_MUTATION,
+    {
+      onCompleted: () => {
+        Navigation.pop(props.componentId);
+      },
+      onError: error => {
+        Alert.alert(error.message);
+      },
+    },
+  );
   function SignUpPressed() {
     const validEmail = validateEmail(email);
     const validphone = validatePhoneNumber(phone);
@@ -40,13 +56,21 @@ export const AddUserScreen: React.FC = props => {
       validPassword &&
       validRole
     ) {
-      Navigation.pop(props.componentId);
+      createUser({
+        variables: {
+          name: name,
+          email: email,
+          phone: phone,
+          birthDate: birthDate,
+          password: password,
+          role: role,
+        },
+      });
     } else {
-      Alert.alert('Wrong credentials, check again');
+      Alert.alert('Wrong format on credentials, please check again');
     }
   }
 
-  const loading = false;
   return (
     <View style={styles.loginView}>
       <ScrollView>
@@ -90,12 +114,6 @@ export const AddUserScreen: React.FC = props => {
           onChangeText={setPassword}
         />
         <Text style={styles.inputTitleStyle}>Role</Text>
-        {/* <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          placeholder="i.e. admin or user"
-          onChangeText={value => setRole(value.toLowerCase())}
-        /> */}
         <Picker
           selectedValue={role}
           onValueChange={(itemValue, itemIndex) => setRole(itemValue)}>

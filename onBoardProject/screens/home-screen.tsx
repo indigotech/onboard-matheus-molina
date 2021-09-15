@@ -19,8 +19,15 @@ const UserCard = ({ item }: { item: User }) => (
   </View>
 );
 
-export const HomeScreen: React.FC = props => {
-  const {loading, error, data, fetchMore} = useQuery<UsersQuery, UserQueryVariables>(USER_QUERY, {
+interface HomeScreenComponent {
+  componentId: string
+}
+
+export const HomeScreen: React.FC<HomeScreenComponent> = props => {
+  const {loading, error, data, fetchMore} = useQuery<
+    UsersQuery,
+    UserQueryVariables
+  >(USER_QUERY, {
     variables: {
       offset: 0,
       limit: 15,
