@@ -10,7 +10,7 @@ export function validatePassword(password: string) {
 }
 
 export function validatePhoneNumber(phone:string){
-console.log(phone.length<17 && phone.length>7)
+return phone.length<17 && phone.length>7
 }
 export function validateDate(date: string){
   const re=/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/

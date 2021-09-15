@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,7 +10,7 @@ import {
 } from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import LoadingIcon from '../components/loading-icon';
-import { validateDate, validatePhoneNumber, validateRole } from '../features/validation';
+import { validateDate, validateEmail, validatePassword, validatePhoneNumber, validateRole } from '../features/validation';
 
 export const AddUserScreen: React.FC = () => {
   const [name, setName] = useState('');
@@ -19,7 +20,19 @@ export const AddUserScreen: React.FC = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
 
-  function SignUpPressed(){}
+  function SignUpPressed(){
+    const validEmail = validateEmail(email)
+    const validphone = validatePhoneNumber(phone)
+    const validBirthDate = validateDate(birthDate)
+    const validPassword = validatePassword(password)
+    const validRole = validateRole(role)
+    if(validEmail && validphone && validBirthDate && validPassword && validRole){
+      console.log('Valid Credentials')
+    }else{
+      Alert.alert('Wrong credentials, check again')
+    }
+
+  }
 
   const loading = false;
   return (
@@ -74,7 +87,7 @@ export const AddUserScreen: React.FC = () => {
         <TouchableOpacity
           disabled={loading}
           style={styles.button}
-          onPress={()=>{}}>
+          onPress={SignUpPressed}>
           <Text style={styles.buttonText}>
             {loading ? <LoadingIcon isIconAnimating={loading} /> : 'Add User'}
           </Text>
