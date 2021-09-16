@@ -1,29 +1,51 @@
 import React, {Component, useState} from 'react';
 
-import {StyleSheet, Text, FlatList, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  FlatList,
+  View,
+  Button,
+  TouchableOpacity,
+  ListRenderItem,
+} from 'react-native';
 
 import {useQuery} from '@apollo/client';
 
-import {USER_QUERY, UsersQuery, UserQueryVariables} from '../features/apollo-home';
+import {
+  USER_QUERY,
+  UsersQuery,
+  UserQueryVariables,
+  UserNodesItem,
+} from '../features/apollo-home';
+import {AddUserButton} from '../components/add-user-button';
+import {Navigation} from 'react-native-navigation';
 
 interface User {
 id: string;
 name: string;
 email: string;
 }
+interface UserCardProps {
+  user: User;
+  onTap: () => void;
+}
+const UserCard = (props: UserCardProps) => {
+  return (
+    <TouchableOpacity onPress={props.onTap}>
+      <View style={styles.UserCardView}>
+        <Text style={styles.UserName}>{props.user.name}</Text>
+        <Text>{props.user.email}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
-const UserCard = ({ item }: { item: User }) => (
-  <View style={styles.UserCardView}>
-    <Text style={styles.UserName}>{item.name}</Text>
-    <Text>{item.email}</Text>
-  </View>
-);
-
-interface HomeScreenComponent {
-  componentId: string
+interface HomeScreenProps {
+  componentId: string;
 }
 
-export const HomeScreen: React.FC<HomeScreenComponent> = props => {
+export const HomeScreen: React.FC<HomeScreenProps> = props => {
   const {loading, error, data, fetchMore} = useQuery<
     UsersQuery,
     UserQueryVariables
@@ -33,8 +55,55 @@ export const HomeScreen: React.FC<HomeScreenComponent> = props => {
       limit: 15,
     },
   });
+
+  const handleEndReached = async () => {
+    if (data?.users.pageInfo.hasNextPage) {
+      await fetchMore({
+        variables: {
+          offset: data?.users.nodes.length,
+        },
+        updateQuery: (previousResult, {fetchMoreResult}) => {
+          const newEntries = fetchMoreResult?.users.nodes ?? [];
+          return {
+            ...previousResult,
+            users: {
+              ...previousResult.users,
+              nodes: [...previousResult.users.nodes, ...newEntries],
+            },
+          };
+        },
+      });
+    }
+  };
+
+  const handleUserCardTap = () => {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'UserDetailsPage',
+      },
+    });
+  };
+
+  const renderItem: ListRenderItem<UserNodesItem> = ({item}) => {
+    return <UserCard user={item} onTap={handleUserCardTap} />;
+  };
+
+  React.useEffect(() => {
+    Navigation.mergeOptions(props.componentId, HomeOptions(props.componentId));
+  }, []);
+
   return (
     <View style={styles.ViewStyle}>
+      <Button
+        onPress={() => {
+          Navigation.push(props.componentId, {
+            component: {
+              name: 'UserDetailsPage',
+            },
+          });
+        }}
+        title="details"
+      />
       <FlatList
         onEndReached={async () => {
           await fetchMore({
@@ -56,11 +125,45 @@ export const HomeScreen: React.FC<HomeScreenComponent> = props => {
 
         }}
         data={data?.users.nodes}
-        renderItem={UserCard}
+        renderItem={renderItem}
         keyExtractor={item => item.id}
       />
     </View>
   );
+};
+
+const HomeOptions = (componentId: string) => ({
+  topBar: {
+    title: {
+      text: 'Home',
+    },
+    rightButtons: [
+      {
+        id: 'AddButton',
+        component: {
+          name: 'AddUserButton',
+          passProps: {
+            onTap: () => {
+              Navigation.push(componentId, {
+                component: AddUserPageComponent,
+              });
+            },
+          },
+        },
+      },
+    ],
+  },
+});
+
+const AddUserPageComponent = {
+  name: 'AddUserPage',
+  options: {
+    topBar: {
+      title: {
+        text: 'SignUp',
+      },
+    },
+  },
 };
 
 const styles = StyleSheet.create({

@@ -29,7 +29,7 @@ interface UserNodes {
   pageInfo: PageInfoItem;
 }
 
-interface UserNodesItem {
+export interface UserNodesItem {
   name: string;
   email: string;
   id: string;

@@ -10,6 +10,7 @@ import {HomeScreen} from './screens/home-screen';
 import {client} from './features/apollo-client';
 import {AddUserButton} from './components/add-user-button';
 import {AddUserScreen} from './screens/add-user-screen';
+import {UserDetailsScreen} from './screens/user-details';
 
 Navigation.registerComponent(
   'LoginPage',
@@ -45,6 +46,17 @@ Navigation.registerComponent(
 );
 
 Navigation.registerComponent('AddUserButton', () => AddUserButton);
+
+Navigation.registerComponent(
+  'UserDetailsPage',
+  () => props =>
+    (
+      <ApolloProvider client={client}>
+        <UserDetailsScreen {...props} />
+      </ApolloProvider>
+    ),
+  () => UserDetailsScreen,
+);
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
