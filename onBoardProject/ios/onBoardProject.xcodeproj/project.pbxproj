@@ -37,6 +37,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = onBoardProject/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = onBoardProject/main.m; sourceTree = "<group>"; };
 		1D0AE47A65C8663E3B452821 /* Pods-onBoardProject-onBoardProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-onBoardProject-onBoardProjectTests.release.xcconfig"; path = "Target Support Files/Pods-onBoardProject-onBoardProjectTests/Pods-onBoardProject-onBoardProjectTests.release.xcconfig"; sourceTree = "<group>"; };
+		4D65CB6626F3990800BB9ED8 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-onBoardProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-onBoardProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-onBoardProject-onBoardProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-onBoardProject-onBoardProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-onBoardProject-onBoardProjectTests/Pods-onBoardProject-onBoardProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = onBoardProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -86,6 +87,7 @@
 		13B07FAE1A68108700A75B9A /* onBoardProject */ = {
 			isa = PBXGroup;
 			children = (
+				4D65CB6526F398C900BB9ED8 /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -104,6 +106,14 @@
 				ABFE59519B596E51CEFDCCC0 /* libPods-onBoardProject-onBoardProjectTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4D65CB6526F398C900BB9ED8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4D65CB6626F3990800BB9ED8 /* FontAwesome.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -143,7 +153,6 @@
 			children = (
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 		E233CBF5F47BEE60B243DCF8 /* Pods */ = {

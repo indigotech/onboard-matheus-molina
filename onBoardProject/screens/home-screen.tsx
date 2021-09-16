@@ -20,6 +20,7 @@ import {
 } from '../features/apollo-home';
 import {AddUserButton} from '../components/add-user-button';
 import {Navigation} from 'react-native-navigation';
+import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 interface User {
 id: string;
@@ -76,16 +77,19 @@ export const HomeScreen: React.FC<HomeScreenProps> = props => {
     }
   };
 
-  const handleUserCardTap = () => {
+  const handleUserCardTap = (user: UserNodesItem) => {
     Navigation.push(props.componentId, {
       component: {
         name: 'UserDetailsPage',
+        passProps: {
+          id: user.id
+        }
       },
     });
   };
 
   const renderItem: ListRenderItem<UserNodesItem> = ({item}) => {
-    return <UserCard user={item} onTap={handleUserCardTap} />;
+    return <UserCard user={item} onTap={()=>handleUserCardTap(item)} />;
   };
 
   React.useEffect(() => {
@@ -94,16 +98,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = props => {
 
   return (
     <View style={styles.ViewStyle}>
-      <Button
-        onPress={() => {
-          Navigation.push(props.componentId, {
-            component: {
-              name: 'UserDetailsPage',
-            },
-          });
-        }}
-        title="details"
-      />
       <FlatList
         onEndReached={async () => {
           await fetchMore({
