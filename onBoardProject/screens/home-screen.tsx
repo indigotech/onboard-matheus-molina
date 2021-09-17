@@ -77,23 +77,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = props => {
   return (
     <View style={styles.ViewStyle}>
       <FlatList
-        onEndReached={async () => {
-          await fetchMore({
-            variables: {
-              offset: data?.users.nodes.length,
-            },
-            updateQuery: (previousResult, {fetchMoreResult}) => {
-              const newEntries = fetchMoreResult?.users.nodes ?? [];
-              return {
-                ...previousResult,
-                users: {
-                  ...previousResult.users,
-                  nodes: [...previousResult.users.nodes, ...newEntries],
-                },
-              };
-            },
-          });
-        }}
+        onEndReached={handleEndReached}
         data={data?.users.nodes}
         renderItem={renderItem}
         keyExtractor={item => item.id}

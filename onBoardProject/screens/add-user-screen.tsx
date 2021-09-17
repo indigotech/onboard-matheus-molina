@@ -13,6 +13,7 @@ import LoadingIcon from '../components/loading-icon';
 import {
   validateDate,
   validateEmail,
+  validateName,
   validatePassword,
   validatePhoneNumber,
   validateRole,
@@ -20,9 +21,15 @@ import {
 import {Picker} from '@react-native-picker/picker';
 import {useMutation} from '@apollo/client';
 import {CREATE_USER_MUTATION} from '../features/apollo-add-user';
+import {
+  ButtonText,
+  Form,
+  FormButton,
+  H1,
+} from '../components/components-styled';
 
 interface AddUserScreenComponent {
-  componentId: string
+  componentId: string;
 }
 
 export const AddUserScreen: React.FC<AddUserScreenComponent> = props => {
@@ -74,44 +81,41 @@ export const AddUserScreen: React.FC<AddUserScreenComponent> = props => {
   return (
     <View style={styles.loginView}>
       <ScrollView>
-        <Text style={styles.titleStyle}>Sign Up</Text>
-        <Text style={styles.inputTitleStyle}>Name</Text>
-        <TextInput
-          autoCapitalize="words"
-          style={styles.input}
+        <H1>Sign Up</H1>
+        <Form
+          label="Name"
           placeholder="Your Name"
+          value={name}
           onChangeText={setName}
+          onEndEditing={validateName}
         />
-        <Text style={styles.inputTitleStyle}>Email</Text>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
+        <Form
+          label="Email"
           placeholder="name@domain.com"
+          value={email}
           onChangeText={setEmail}
-          keyboardType="email-address"
+          onEndEditing={validateEmail}
         />
-        <Text style={styles.inputTitleStyle}>Phone</Text>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          placeholder="(XX) XXXX-XXXX"
+        <Form
+          label="Phone"
+          placeholder="XX XXXX XXXX"
+          value={phone}
           onChangeText={setPhone}
-          keyboardType="phone-pad"
+          onEndEditing={validatePhoneNumber}
         />
-        <Text style={styles.inputTitleStyle}>Birth Date</Text>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
+        <Form
+          label="Birth Date"
           placeholder="yyyy-mm-dd"
+          value={birthDate}
           onChangeText={setBirthDate}
-          keyboardType="numeric"
+          onEndEditing={validateDate}
         />
-        <Text style={styles.inputTitleStyle}>Password</Text>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
+        <Form
+          label="Password"
           placeholder="0000abcd"
+          value={password}
           onChangeText={setPassword}
+          onEndEditing={validatePassword}
         />
         <Text style={styles.inputTitleStyle}>Role</Text>
         <Picker
@@ -121,14 +125,19 @@ export const AddUserScreen: React.FC<AddUserScreenComponent> = props => {
           <Picker.Item label="Admin" value="admin" />
         </Picker>
       </ScrollView>
-      <TouchableOpacity
-        disabled={loading}
-        style={styles.button}
-        onPress={SignUpPressed}>
-        <Text style={styles.buttonText}>
-          {loading ? <LoadingIcon isIconAnimating={loading} /> : 'Add User'}
-        </Text>
-      </TouchableOpacity>
+      <FormButton disabled={loading} onPress={SignUpPressed}>
+        <ButtonText>
+          {loading ? (
+            <LoadingIcon
+              size="small"
+              color="#fbfbfb"
+              isIconAnimating={loading}
+            />
+          ) : (
+            'Add User'
+          )}
+        </ButtonText>
+      </FormButton>
     </View>
   );
 };
@@ -140,44 +149,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
   },
-  titleStyle: {
-    color: '#000000',
-    fontWeight: 'bold',
-    fontSize: 26,
-    letterSpacing: 0.25,
-    marginBottom: 60,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#777',
-    padding: 8,
-    marginVertical: 10,
-    width: '100%',
-    height: 50,
-    borderRadius: 12,
-  },
+
   inputTitleStyle: {
-    fontWeight: '700',
-    color: '#000000',
-    fontSize: 18,
-  },
-  pickerStyle: {
-    backgroundColor: '#fbfbfb',
-  },
-  button: {
-    padding: 8,
-    marginVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#5050ad',
-    width: '100%',
-    height: 50,
-    borderRadius: 12,
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontWeight: 'bold',
+    color: '#777777',
     fontSize: 16,
-    letterSpacing: 0.25,
+    marginBottom: 12,
+    marginTop: 6,
   },
 });

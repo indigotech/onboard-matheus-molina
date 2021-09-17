@@ -1,3 +1,7 @@
+export function validateName(name:string) {
+  return name != null && name.length> 0
+}
+
 export function validateEmail(email: string) {
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -19,6 +23,9 @@ export function validateDate(date: string) {
     const year = parseInt(date.split('-')[0]);
     const thisYear = new Date().getFullYear();
     return year > 1900 && year < thisYear;
+  }
+  else{
+    return false
   }
 }
 

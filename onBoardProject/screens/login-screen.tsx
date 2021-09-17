@@ -20,6 +20,12 @@ import {useMutation} from '@apollo/client';
 
 import {Navigation} from 'react-native-navigation';
 import LoadingIcon from '../components/loading-icon';
+import {
+  ButtonText,
+  Form,
+  FormButton,
+  H1,
+} from '../components/components-styled';
 
 interface LoginScreenProps {
   componentId: string;
@@ -52,29 +58,35 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
 
   return (
     <View style={styles.loginView}>
-      <Text style={styles.titleStyle}>Bem-vindo(a) à Taqtile!</Text>
-      <Text>Email</Text>
-      <TextInput
-        autoCapitalize="none"
-        style={styles.input}
+      <H1>Bem-vindo(a) à Taqtile!</H1>
+      <Form
+        label="Email"
         placeholder="name@domain.com"
+        value={email}
         onChangeText={setEmail}
+        onEndEditing={validateEmail}
       />
-      <Text>Password</Text>
-      <TextInput
-        autoCapitalize="none"
-        style={styles.input}
+      <Form
+        label="Password"
         placeholder="0000abcd"
-        onChangeText={val => setPassword(val)}
+        value={password}
+        onChangeText={setPassword}
+        onEndEditing={validatePassword}
       />
-      <TouchableOpacity
-        disabled={loading}
-        style={styles.button}
-        onPress={loginPressed}>
-        <Text style={styles.buttonText}>
-          {loading ? <LoadingIcon size="small"color="#ffffff" isIconAnimating={loading} /> : 'Entrar'}
-        </Text>
-      </TouchableOpacity>
+
+      <FormButton disabled={loading} onPress={loginPressed}>
+        <ButtonText>
+          {loading ? (
+            <LoadingIcon
+              size="small"
+              color="#ffffff"
+              isIconAnimating={loading}
+            />
+          ) : (
+            'Entrar'
+          )}
+        </ButtonText>
+      </FormButton>
     </View>
   );
 };
@@ -85,37 +97,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     padding: 10,
-  },
-  titleStyle: {
-    color: '#000000',
-    fontWeight: 'bold',
-    fontSize: 26,
-    letterSpacing: 0.25,
-    marginBottom: 60,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#777',
-    padding: 8,
-    marginVertical: 10,
-    width: '100%',
-    height: 50,
-    borderRadius: 12,
-  },
-  button: {
-    padding: 8,
-    marginVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#5050ad',
-    width: '100%',
-    height: 50,
-    borderRadius: 12,
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontWeight: 'bold',
-    fontSize: 16,
-    letterSpacing: 0.25,
   },
 });
