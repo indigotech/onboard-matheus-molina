@@ -72,7 +72,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = props => {
         style={styles.button}
         onPress={loginPressed}>
         <Text style={styles.buttonText}>
-          {loading ? <LoadingIcon isIconAnimating={loading} /> : 'Entrar'}
+          {loading ? <LoadingIcon size="small"color="#ffffff" isIconAnimating={loading} /> : 'Entrar'}
         </Text>
       </TouchableOpacity>
     </View>

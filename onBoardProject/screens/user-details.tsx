@@ -14,8 +14,18 @@ export const UserDetailsScreen: React.FC<UserDetailScreenProps> = props => {
     variables: {id: props.id},
     onError: error => Alert.alert(error.message),
   });
+
   if (loading) {
-    return <LoadingIcon isIconAnimating={loading} />;
+    return (
+      <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }
+      }>
+        <LoadingIcon size="large" color="#000000" isIconAnimating={loading} />
+      </View>
+    );
   } else {
     return (
       <View>
