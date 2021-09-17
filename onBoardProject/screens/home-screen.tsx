@@ -1,11 +1,10 @@
-import React, {Component, useState} from 'react';
+import React from 'react';
 
 import {
   StyleSheet,
   Text,
   FlatList,
   View,
-  Button,
   TouchableOpacity,
   ListRenderItem,
 } from 'react-native';
@@ -18,29 +17,8 @@ import {
   UserQueryVariables,
   UserNodesItem,
 } from '../features/apollo-home';
-import {AddUserButton} from '../components/add-user-button';
 import {Navigation} from 'react-native-navigation';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
-
-interface User {
-id: string;
-name: string;
-email: string;
-}
-interface UserCardProps {
-  user: User;
-  onTap: () => void;
-}
-const UserCard = (props: UserCardProps) => {
-  return (
-    <TouchableOpacity onPress={props.onTap}>
-      <View style={styles.UserCardView}>
-        <Text style={styles.UserName}>{props.user.name}</Text>
-        <Text>{props.user.email}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+import {UserCard} from '../components/user-card';
 
 interface HomeScreenProps {
   componentId: string;
@@ -82,14 +60,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = props => {
       component: {
         name: 'UserDetailsPage',
         passProps: {
-          id: user.id
-        }
+          id: user.id,
+        },
       },
     });
   };
 
   const renderItem: ListRenderItem<UserNodesItem> = ({item}) => {
-    return <UserCard user={item} onTap={()=>handleUserCardTap(item)} />;
+    return <UserCard user={item} onTap={() => handleUserCardTap(item)} />;
   };
 
   React.useEffect(() => {
@@ -115,8 +93,6 @@ export const HomeScreen: React.FC<HomeScreenProps> = props => {
               };
             },
           });
-          
-
         }}
         data={data?.users.nodes}
         renderItem={renderItem}
